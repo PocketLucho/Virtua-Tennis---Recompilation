@@ -1,0 +1,39 @@
+﻿VIRTUA TENNIS - RECOMP  (Hecho por Pocket_lucho con Claude)
+==========================================================
+
+Recompilación estática de Virtua Tennis (1999) y Virtua Tennis 2 (2001), Sega NAOMI.
+Si quieres apoyarme: https://buymeacoffee.com/pocket_lucho
+
+INSTALACIÓN
+1. Copia tus romsets en la carpeta "roms": vtennis.zip (Virtua Tennis) y/o
+   vtenis2c.zip (Virtua Tennis 2).
+2. Copia la BIOS naomi.zip en la carpeta "data" (sólo hace falta la primera vez que
+   arranca cada juego y región).
+3. Ejecuta CONSTRUIR_JUEGO.bat UNA vez. Descarga el compilador gratuito llvm-mingw
+   (180 MB, sólo la primera vez), genera el código de los juegos a partir de TUS ROMs y
+   lo compila en vt_game.dll (de 5 a 20 minutos).
+4. Ejecuta VirtuaTennis-Recompiled.exe, elige un juego y pulsa JUGAR.
+   Si más adelante añades el otro juego, vuelve a ejecutar CONSTRUIR_JUEGO.bat.
+
+Este paquete no contiene nada de los juegos: ni ROM, ni BIOS, ni gráficos, ni sonido,
+ni código. vt_game.dll y data\*_boot_*.state se generan a partir de tus archivos:
+no los compartas.
+
+OPCIONES (tecla Tab o el menú)
+- Video: "Panorámico 16:9" (cámara 16:9 real con el marcador y los menús en 4:3),
+  "Antialiasing (FXAA)", Resolución interna (supermuestreo).
+- General: Región (Japón, EE. UU., Exportación, Corea). La primera vez que uses una región
+  hace falta naomi.zip.
+- Menú: Reiniciar, Trucos ("El rival no puede puntuar" facilita terminar el modo Arcade en
+  Normal sin perder ningún juego y sin continuar, lo que desbloquea a Master / King;
+  "Empieza cada juego con 40").
+- Red: juego online con GGPO (experimental). Los dos jugadores con la misma versión, el
+  mismo romset y la misma opción de panorámico.
+
+PROBLEMAS
+- "Falta el código del juego" o "Ejecuta el constructor": ejecuta CONSTRUIR_JUEGO.bat.
+- Tras actualizar a una versión nueva: vuelve a ejecutar CONSTRUIR_JUEGO.bat.
+- Arranque raro: borra data\*_boot_*.state (se vuelve a crear con naomi.zip).
+
+Licencia GPL v2 (basado en Flycast). Código fuente:
+https://github.com/PocketLucho/Virtua-Tennis---Recompilation

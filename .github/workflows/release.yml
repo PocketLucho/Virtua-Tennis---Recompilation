@@ -1,0 +1,80 @@
+# Builds the distributable packages (engine + builder, no game code) for Windows and Linux
+# and publishes them as a GitHub release when a tag v* is pushed.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release tag to create, e.g. v2026.11.07'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Tools
+        run: sudo apt-get update && sudo apt-get install -y ninja-build zip
+      - name: llvm-mingw
+        run: |
+          curl -sL -o lm.tar.xz https://github.com/mstorsjo/llvm-mingw/releases/download/20251104/llvm-mingw-20251104-ucrt-ubuntu-22.04-x86_64.tar.xz
+          tar -xf lm.tar.xz -C $HOME
+      - name: Build package
+        run: LLVM_MINGW=$HOME/llvm-mingw-20251104-ucrt-ubuntu-22.04-x86_64 vt/tools/package_windows.sh $PWD/dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: dist/VirtuaTennis-Recomp-win64.zip
+
+  linux:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build libsdl2-dev libcurl4-openssl-dev \
+            libudev-dev libpulse-dev libasound2-dev libgl-dev libzip-dev zlib1g-dev libao-dev
+      - name: Build package
+        run: vt/tools/package_linux.sh $PWD/dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux
+          path: dist/VirtuaTennis-Recomp-linux-x64.tar.gz
+
+  release:
+    needs: [windows, linux]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: out
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          if [ "${GITHUB_REF_TYPE}" != "tag" ]; then TAG="${{ inputs.version }}"; fi
+          cat > notes.md <<'NOTES'
+          Engine + builder for Windows x64 and Linux x86_64. **No game code, ROM or BIOS included.**
+
+          1. Copy `vtennis.zip` and/or `vtenis2c.zip` to `roms/` and `naomi.zip` to `data/`.
+          2. Windows: run `BUILD_GAME.bat` (or `CONSTRUIR_JUEGO.bat`) once. Linux: run `./build_game.sh` once.
+             It builds the game module from your own ROMs.
+          3. Run `VirtuaTennis-Recompiled`.
+
+          Motor y constructor para Windows y Linux, sin código, ROM ni BIOS de los juegos. Instrucciones en LEEME.txt.
+          If you want to support me: https://buymeacoffee.com/pocket_lucho
+          NOTES
+          gh release create "$TAG" out/windows/VirtuaTennis-Recomp-win64.zip out/linux/VirtuaTennis-Recomp-linux-x64.tar.gz \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "VIRTUA TENNIS - RECOMP $TAG" --notes-file notes.md

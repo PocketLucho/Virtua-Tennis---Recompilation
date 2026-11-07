@@ -1,0 +1,33 @@
+build/
+artifact/
+
+# macOS
+.DS_Store
+shell/apple/emulator-ios/OpenMP/OpenMP.xcframework
+
+# Visual Studio
+.vs/
+.vscode/
+out/
+
+# JetBrains IDES
+.idea/
+cmake-build-*/
+
+# Dependencies from .gitmodules
+core/deps/breakpad/
+core/deps/glslang/
+.cache/
+compile_commands.json
+CMakeUserPresets.json
+
+# VIRTUA NBA - RECOMP: never commit game-derived files
+/build*/
+/dist/
+/vnba_game.dll
+/roms/
+/data/
+vnba_boot*.state
+/vt/builder/gen/
+/vt/builder/obj/
+/vt/builder/tools/

@@ -1,0 +1,29 @@
+// VIRTUA TENNIS - RECOMP: executable icon and version info
+#include "../resource.h"
+#include "../../../core/version.h"
+
+IDI_ICON1               ICON                    "vt.ico"
+
+1 VERSIONINFO
+FILEVERSION     1,0,0,0
+PRODUCTVERSION  1,0,0,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "CompanyName", "Pocket_lucho"
+      VALUE "FileDescription", "VIRTUA TENNIS - RECOMP"
+      VALUE "FileVersion", __DATE__
+      VALUE "InternalName", "VirtuaTennis-Recompiled"
+      VALUE "LegalCopyright", "Hecho por Pocket_lucho con Claude. Basado en Flycast (GNU GPL)."
+      VALUE "OriginalFilename", "VirtuaTennis-Recompiled.exe"
+      VALUE "ProductName", "VIRTUA TENNIS - RECOMP"
+      VALUE "ProductVersion", __DATE__
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1252
+  END
+END
