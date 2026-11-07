@@ -75,7 +75,12 @@ Option<bool> Widescreen("rend.WideScreen");
 Option<bool> SuperWidescreen("rend.SuperWideScreen");
 Option<bool> ShowFPS("rend.ShowFPS");
 Option<bool> Fxaa("rend.FXAA");
+#ifdef VNBA_PRODUCT
+// Virtua Tennis reads its render-to-texture passes back from VRAM (attract mode grey/blur effect)
+Option<bool> RenderToTextureBuffer("rend.RenderToTextureBuffer", true);
+#else
 Option<bool> RenderToTextureBuffer("rend.RenderToTextureBuffer");
+#endif
 Option<bool> TranslucentPolygonDepthMask("rend.TranslucentPolygonDepthMask");
 Option<bool> ModifierVolumes("rend.ModifierVolumes", true);
 Option<int> TextureUpscale("rend.TextureUpscale2", 1);
