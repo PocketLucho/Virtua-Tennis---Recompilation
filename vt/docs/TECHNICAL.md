@@ -31,7 +31,10 @@ vtennis.zip / vtenis2c.zip ──► engine boots the game (BIOS once, then boot
 `vt/builder/build_game.ps1` (Windows) and `build_game.sh` (Linux) drive it: for each romset found they run the
 engine with `VNBA_AOT=1 VNBA_START_GAME=<romset> VNBA_AOT_DUMP=... VNBA_AOT_STATIC=seeds_<romset>.txt
 VNBA_AOT_STATIC_PTR=1 VNBA_AOT_STATIC_SZ1=1 VNBA_AOT_STATIC_FUNCS=1`; the engine decodes the program at the entry
-point, writes the dump and exits. `VNBA_SPLIT=<dir> VNBA_SPLIT_INPUTS=<dump;dump>` then splits the dumps and the
+point, writes the dump and exits. Without a boot snapshot the BIOS has to run first: the builder then uses
+Flycast's dynarec (`VNBA_AOT=0`, chosen in `vnba_product_init`), which stops at the entry point in `compilePC`
+(`aot_builder_entry_check`), saves the snapshot and runs the decoder; the BIOS blocks it compiled on the way
+are dumped into the module too. `VNBA_SPLIT=<dir> VNBA_SPLIT_INPUTS=<dump;dump>` then splits the dumps and the
 makefile compiles the module. About 170,000 blocks are generated for the two games; the few thousand blocks that
 are not precompiled (BIOS code before the entry point, code built at run time) run in the interpreter.
 

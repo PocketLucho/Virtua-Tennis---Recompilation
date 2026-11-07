@@ -170,6 +170,10 @@ static DynarecCodeEntryPtr compilePC(u32 blockcheck_failures)
 	if (codeBuffer.getFreeSpace() < 32_KB || pc == 0x8c0000e0 || pc == 0xac010000 || pc == 0xac008300)
 		Sh4Recompiler::Instance->ResetCache();
 
+	// builder: the BIOS ran on the dynarec up to the game entry point (does not return there)
+	void aot_builder_entry_check(u32 pc);
+	aot_builder_entry_check(pc);
+
 	RuntimeBlockInfo* rbi = sh4Dynarec->allocateBlock();
 
 	if (!rbi->Setup(pc, Sh4cntx.fpscr))

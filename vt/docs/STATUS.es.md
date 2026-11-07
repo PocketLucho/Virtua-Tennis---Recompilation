@@ -36,6 +36,12 @@
   estirado: siempre 4:3.
 - **Efecto gris del attract de VT1 (DirectX 11)**: la lectura de la textura renderizada a la CPU reutiliza la
   textura de *staging* y el búfer en lugar de crearlos en cada pasada.
+- **Primer arranque (BIOS) lento en el constructor**: sin instantánea, el constructor ejecutaba la BIOS de NAOMI
+  en el intérprete del ejecutor AOT (todavía no hay código recompilado), varias veces más lento que el dynarec.
+  Ahora, si no hay instantánea, el constructor usa el dynarec de Flycast para la BIOS y se detiene en el punto de
+  entrada del juego (`aot_builder_entry_check` en `compilePC`): guarda la instantánea, decodifica el programa y
+  sale. Prueba (Linux, 2 núcleos): de 69 s a 8 s por juego. Los bloques de la BIOS compilados por el camino se
+  incluyen en el módulo, así que el primer arranque de otra región también va más rápido.
 - Documentación en inglés (README, TECHNICAL, README.txt) y en español (README.es, LEEME).
 
 ## Pendiente

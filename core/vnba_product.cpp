@@ -190,6 +190,22 @@ bool vnba_product_init()
 			return false;
 		}
 		settings.content.path = path;
+		// Without a boot snapshot the builder has to run the NAOMI BIOS up to the game entry
+		// point. There is no recompiled code yet, so use Flycast's dynarec for that (the AOT
+		// executor would interpret all of it, several times slower); the dynarec stops at the
+		// entry point (aot_builder_entry_check). With a snapshot, the AOT executor restores it.
+		if (getenv("VNBA_AOT_STATIC") != nullptr && getenv("VNBA_BUILDER_AOT") == nullptr)
+		{
+			bool aot_boot_snapshot_available();
+			const bool snap = aot_boot_snapshot_available();
+#ifdef _WIN32
+			_putenv_s("VNBA_AOT", snap ? "1" : "0");
+#else
+			setenv("VNBA_AOT", snap ? "1" : "0", 1);
+#endif
+			if (!snap)
+				config::DynarecEnabled.override(true);
+		}
 		return true;
 	}
 	bool any = false;

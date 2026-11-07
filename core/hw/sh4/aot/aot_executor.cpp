@@ -872,6 +872,29 @@ private:
 	u64 blockRuns = 0, interpOps = 0, hashFails = 0;
 };
 
+// Builder without a boot snapshot: the BIOS runs on Flycast's dynarec (VNBA_AOT=0). When the
+// dynarec reaches the game entry point, save the boot snapshot, decode the program like the AOT
+// executor does and exit. The BIOS blocks compiled on the way were dumped too (aot_dump_block).
+bool aot_executor_enabled();
+void aot_builder_entry_check(u32 pc)
+{
+	static const bool builder = getenv("VNBA_AOT_STATIC") != nullptr && getenv("VNBA_AOT_DUMP") != nullptr;
+	if (!builder || aot_executor_enabled())
+		return;
+	const AotGameInfo& g = aot_game_info();
+	if (!g.valid || (pc & 0x1FFFFFFF) != g.entry)
+		return;
+	NOTICE_LOG(BOOT, "Builder: game entry point %08x reached on the dynarec", pc);
+	bool aot_boot_hook(u32 pc);
+	aot_boot_hook(pc);	// no snapshot yet: saves it
+	void aot_static_generate(const char *seedFile);
+	aot_static_generate(getenv("VNBA_AOT_STATIC"));
+	void aot_dump_close();
+	aot_dump_close();
+	fflush(stderr);
+	std::_Exit(0);
+}
+
 // The AOT executor is used whenever precompiled blocks are linked in, unless VNBA_AOT=0.
 // VNBA_AOT=1 forces it (all code then runs through the cycle-exact fallback).
 bool aot_executor_enabled()
