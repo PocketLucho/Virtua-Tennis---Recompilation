@@ -326,6 +326,16 @@ void term()
 }
 #endif	// !TARGET_UWP
 
+#elif defined(VNBA_NO_CURL)
+// VIRTUA TENNIS - RECOMP (Linux): no HTTP features are used, so libcurl is not linked.
+// This keeps the binary portable across distributions (SteamOS, Arch, Fedora...).
+namespace http {
+void init() {}
+int get(const std::string&, std::vector<u8>&, const Headers *, Headers *) { return 500; }
+int post(const std::string&, const char *, const char *, std::vector<u8>&) { return 500; }
+int post(const std::string&, const std::vector<PostField>&) { return 500; }
+void term() {}
+}
 #else
 #include <curl/curl.h>
 

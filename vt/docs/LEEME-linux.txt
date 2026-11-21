@@ -1,19 +1,39 @@
-VIRTUA TENNIS - RECOMP  (Hecho por Pocket_lucho con Claude)
-==========================================================
+VIRTUA TENNIS - RECOMP para Linux x86_64 y SteamOS  (Hecho por Pocket_lucho con Claude)
+=======================================================================================
 
 Recompilación estática de Virtua Tennis (1999) y Virtua Tennis 2 (2001), Sega NAOMI.
 Si quieres apoyarme: https://buymeacoffee.com/pocket_lucho
+
+REQUISITOS: ninguno que instalar. Funciona en SteamOS (Steam Deck, Legion Go S...), Ubuntu,
+Fedora, Arch, etc. Si el sistema no tiene compilador de C++, build_game.sh descarga uno
+portátil (Zig, ~45 MB) la primera vez, dentro de esta carpeta. No hace falta sudo.
+Sólo hace falta conexión a internet la primera vez si no tienes g++.
 
 INSTALACIÓN
 1. Copia tus romsets en la carpeta "roms": vtennis.zip (Virtua Tennis) y/o
    vtenis2c.zip (Virtua Tennis 2).
 2. Copia la BIOS naomi.zip en la carpeta "data" (sólo hace falta la primera vez que
    arranca cada juego y región).
-3. Ejecuta ./build_game.sh UNA vez. Necesita g++ y make (sudo apt install
-   build-essential), genera el código de los juegos a partir de TUS ROMs y lo compila
-   en libvt_game.so (de 5 a 20 minutos).
-4. Ejecuta ./VirtuaTennis-Recompiled, elige un juego y pulsa JUGAR.
+3. Abre una terminal en esta carpeta y ejecuta UNA vez:   ./build_game.sh
+   Genera el código de los juegos a partir de TUS ROMs y lo compila en libvt_game.so
+   (de 5 a 25 minutos).
+4. Para jugar ejecuta:   ./VirtuaTennis.sh   , elige un juego y pulsa JUGAR.
+   (si falla, el motivo se muestra en una ventana y queda en vt.log)
    Si más adelante añades el otro juego, vuelve a ejecutar ./build_game.sh.
+
+STEAMOS (Steam Deck / Legion Go S)
+1. Pasa al Modo Escritorio (botón Steam > Apagar > Cambiar a escritorio).
+2. Descomprime el .tar.gz (por ejemplo en ~/Games/VirtuaTennis-Recomp) y copia las ROMs y la BIOS.
+3. En el gestor de archivos (Dolphin), dentro de la carpeta: clic derecho >
+   "Abrir terminal aquí" y escribe:
+       chmod +x build_game.sh VirtuaTennis.sh VirtuaTennis-Recompiled
+       ./build_game.sh
+4. Prueba el juego con ./VirtuaTennis.sh
+5. Para jugar en Modo Juego: abre Steam en el escritorio > "Añadir un juego" >
+   "Añadir un juego que no es de Steam" > Examinar > elige VirtuaTennis.sh (cambia el filtro
+   a "Todos los archivos"). Vuelve al Modo Juego y aparecerá en tu biblioteca.
+   El mando funciona directamente; el menú de configuración se abre con la tecla Tab
+   o con el botón asignado en las opciones de controles.
 
 Este paquete no contiene nada de los juegos: ni ROM, ni BIOS, ni gráficos, ni sonido,
 ni código. libvt_game.so y data/*_boot_*.state se generan a partir de tus archivos:

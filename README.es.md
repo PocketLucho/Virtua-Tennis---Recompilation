@@ -18,7 +18,7 @@ Si quieres apoyarme: https://buymeacoffee.com/pocket_lucho
   * **Virtua Tennis 2** / Power Smash 2: `vtenis2c.zip`
 * La **BIOS de NAOMI** (`naomi.zip`): sólo para el primer arranque de cada juego y región, para crear una
   instantánea de arranque. Después los juegos arrancan directamente en el logo de SEGA sin ella.
-* Windows 10/11 x64, o Linux x86_64 (glibc 2.35+, p. ej. Ubuntu 22.04 o posterior).
+* Windows 10/11 x64, o Linux x86_64 (glibc 2.35+: SteamOS 3, Ubuntu 22.04 o posterior, Fedora, Arch...).
 
 **Ni este repositorio ni las releases incluyen código, gráficos, sonido ni BIOS de los juegos.**
 El código recompilado se genera en tu PC a partir de tus propias ROMs (ver abajo).
@@ -37,10 +37,12 @@ El código recompilado se genera en tu PC a partir de tus propias ROMs (ver abaj
 
 Si más adelante añades el otro juego, vuelve a ejecutar `CONSTRUIR_JUEGO.bat`.
 
-## Primeros pasos (Linux x86_64)
+## Primeros pasos (Linux x86_64 / SteamOS)
 
-Descarga `VirtuaTennis-Recomp-linux-x64.tar.gz`, descomprímelo, copia las ROMs y la BIOS como arriba y ejecuta
-`./build_game.sh` una vez (necesita `g++` y `make`: `sudo apt install build-essential`) y luego `./VirtuaTennis-Recompiled`.
+Descarga `VirtuaTennis-Recomp-linux-x64.tar.gz`, descomprímelo, copia las ROMs y la BIOS como arriba, ejecuta una vez
+`./build_game.sh` y juega con `./VirtuaTennis.sh`. No hay que instalar nada: si no hay compilador de C++ (SteamOS),
+el constructor descarga uno portátil (Zig) en su propia carpeta. En SteamOS hazlo en el Modo Escritorio y después
+añade `VirtuaTennis.sh` a Steam como juego que no es de Steam. Más detalles en `LEEME-linux.txt` dentro del paquete.
 
 ## Características
 

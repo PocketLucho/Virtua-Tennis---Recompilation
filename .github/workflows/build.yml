@@ -39,8 +39,8 @@ jobs:
       - name: Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake ninja-build libsdl2-dev libcurl4-openssl-dev \
-            libudev-dev libpulse-dev libasound2-dev libgl-dev libzip-dev zlib1g-dev libao-dev
+          sudo apt-get install -y build-essential cmake ninja-build libsdl2-dev \
+            libudev-dev libpulse-dev libasound2-dev libgl-dev zlib1g-dev
       - name: Build package
         run: vt/tools/package_linux.sh $PWD/dist
       - uses: actions/upload-artifact@v4
@@ -48,3 +48,33 @@ jobs:
           name: linux
           path: dist/VirtuaTennis-Recomp-linux-x64.tar.gz
 
+  # SteamOS-like check: an Arch Linux system with no compiler and no development packages.
+  # The engine must start (all libraries found) and build_game.sh must build a module by itself.
+  steamos:
+    needs: linux
+    runs-on: ubuntu-24.04
+    container: archlinux:latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: linux
+      - name: Runtime libraries only (what SteamOS ships)
+        run: pacman -Syu --noconfirm --needed libpulse alsa-lib libglvnd systemd-libs zlib zstd libpng xz tar curl
+      - name: Engine libraries resolve
+        run: |
+          tar -xzf VirtuaTennis-Recomp-linux-x64.tar.gz
+          cd VirtuaTennis-Recomp
+          ! command -v g++ && ! command -v make
+          ldd ./VirtuaTennis-Recompiled | tee ldd.txt
+          ! grep -q "not found" ldd.txt
+          (SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy timeout 20 ./VirtuaTennis-Recompiled 2>&1 || true) | tee run.txt
+          ! grep -q "error while loading shared libraries" run.txt
+      - name: Builder bootstraps its own compiler (Zig) and builds a module
+        run: |
+          vt/tools/make_test_gen.sh VirtuaTennis-Recomp
+          cd VirtuaTennis-Recomp
+          VNBA_NO_PAUSE=1 ./build_game.sh --compile-only
+          ls -la libvt_game.so
+          grep -q vnba_game_init libvt_game.so
+          ldd libvt_game.so

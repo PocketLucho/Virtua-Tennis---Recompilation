@@ -18,7 +18,7 @@ If you want to support me: https://buymeacoffee.com/pocket_lucho
   * **Virtua Tennis 2** / Power Smash 2: `vtenis2c.zip`
 * The **NAOMI BIOS** (`naomi.zip`): only for the first start of each game and region, to create a boot
   snapshot. After that, the games boot straight to the SEGA logo without it.
-* Windows 10/11 x64, or Linux x86_64 (glibc 2.35+, e.g. Ubuntu 22.04 or newer).
+* Windows 10/11 x64, or Linux x86_64 (glibc 2.35+: SteamOS 3, Ubuntu 22.04 or newer, Fedora, Arch...).
 
 **No game code, graphics, sound or BIOS is included in this repository or in the releases.**
 The recompiled code is generated on your PC from your own ROMs (see below).
@@ -37,10 +37,12 @@ The recompiled code is generated on your PC from your own ROMs (see below).
 
 If you add the other game later, run `BUILD_GAME.bat` again.
 
-## Getting started (Linux x86_64)
+## Getting started (Linux x86_64 / SteamOS)
 
 Download `VirtuaTennis-Recomp-linux-x64.tar.gz`, extract it, copy the ROMs and the BIOS as above, then run
-`./build_game.sh` once (needs `g++` and `make`: `sudo apt install build-essential`) and `./VirtuaTennis-Recompiled`.
+`./build_game.sh` once and play with `./VirtuaTennis.sh`. Nothing needs to be installed: if there is no C++
+compiler (SteamOS), the builder downloads a portable one (Zig) into its own folder. On SteamOS do this in
+Desktop Mode, then add `VirtuaTennis.sh` to Steam as a non-Steam game. See `README-linux.txt` in the package.
 
 ## Features
 

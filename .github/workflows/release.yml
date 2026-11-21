@@ -43,8 +43,8 @@ jobs:
       - name: Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake ninja-build libsdl2-dev libcurl4-openssl-dev \
-            libudev-dev libpulse-dev libasound2-dev libgl-dev libzip-dev zlib1g-dev libao-dev
+          sudo apt-get install -y build-essential cmake ninja-build libsdl2-dev \
+            libudev-dev libpulse-dev libasound2-dev libgl-dev zlib1g-dev
       - name: Build package
         run: vt/tools/package_linux.sh $PWD/dist
       - uses: actions/upload-artifact@v4
@@ -66,14 +66,15 @@ jobs:
         run: |
           if [ "${GITHUB_REF_TYPE}" != "tag" ]; then TAG="${{ inputs.version }}"; fi
           cat > notes.md <<'NOTES'
-          Engine + builder for Windows x64 and Linux x86_64. **No game code, ROM or BIOS included.**
+          Engine + builder for Windows x64 and Linux x86_64 / SteamOS. **No game code, ROM or BIOS included.**
 
           1. Copy `vtennis.zip` and/or `vtenis2c.zip` to `roms/` and `naomi.zip` to `data/`.
           2. Windows: run `BUILD_GAME.bat` (or `CONSTRUIR_JUEGO.bat`) once. Linux: run `./build_game.sh` once.
              It builds the game module from your own ROMs.
-          3. Run `VirtuaTennis-Recompiled`.
+          3. Windows: run `VirtuaTennis-Recompiled.exe`. Linux / SteamOS: run `./VirtuaTennis.sh` (nothing to install;
+             on SteamOS see README-linux.txt to add it to Steam as a non-Steam game).
 
-          Motor y constructor para Windows y Linux, sin código, ROM ni BIOS de los juegos. Instrucciones en LEEME.txt.
+          Motor y constructor para Windows y Linux / SteamOS, sin código, ROM ni BIOS de los juegos. Instrucciones en LEEME.txt.
           If you want to support me: https://buymeacoffee.com/pocket_lucho
           NOTES
           gh release create "$TAG" out/windows/VirtuaTennis-Recomp-win64.zip out/linux/VirtuaTennis-Recomp-linux-x64.tar.gz \
